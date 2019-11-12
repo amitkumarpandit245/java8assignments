@@ -20,17 +20,6 @@ public class NIO2Exercise {
 		
 	}
 	
-	public static boolean isExpired(int date,int month, int year) {
-		LocalDate currentDate=LocalDate.now();
-		LocalDate expiryDate=LocalDate.of(year, month, date);
-		boolean res=expiryDate.isBefore(currentDate);
-		return res;
-	}
-	public static boolean isCompany(String comp , String manufacturer) {
-		return comp.equalsIgnoreCase(manufacturer);
-	}
-
-	
 	  public static Map<String,LocalDate> getExpiredTablets(String filename, String manufacturer)
 	  { 
 		  Map<String,LocalDate> res=new LinkedHashMap<>();
