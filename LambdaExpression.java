@@ -1,75 +1,68 @@
+package com.cts.lambda;
+
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LambdaExercise {
-	static List<String> countries=new ArrayList<>();
-	static Map<String, String> countryCapitals=new HashMap<>();
-static{
+	private static List<String> countries=new ArrayList<>();
+	private static Map<String, String> countryCapitals=new HashMap<>();
+static {
 	countries.add("India");
-	countries.add("Srilanka");
-	countries.add("Australia");
 	countries.add("China");
+	countries.add("Sri Lanka");
+	countries.add("Bhutan");
+	countries.add("Bangladesh");
 	countryCapitals.put("India", "New Delhi");
-	countryCapitals.put("Srilanka", "Colombo");
+	countryCapitals.put("Sri Lanka", "Colombo");
+	countryCapitals.put("China", "Beijing");
+	countryCapitals.put("Bhutan", "Thimphu");
+	countryCapitals.put("Bangladesh", "Dhaka");
 }
-public static void displayCountries(){
-	countries.forEach(p->System.out.print(p+" "));
+public static void displayCountries() {
+	countries.forEach(System.out::println);
 }
-public static void DisplayCountryCapitals(){
-	countryCapitals.forEach((a,b)->System.out.print(a+" "+b+"\n"));
+public static void displayCountryCapitals() {
+	countryCapitals.forEach((k,v)->System.out.println(k+"  :"+v));
 }
-public static void sortCountriesByName(){
-	Collections.sort(countries, (c1,c2)->c2.compareTo(c1));
-	countries.forEach(s->System.out.println(s));
+public static void sortCountriesByName() {
+	countries.sort((c1,c2)->c1.compareToIgnoreCase(c2));
+	countries.forEach(System.out::println);
 }
-public static void sortCountriesBylength(){
-	Collections.sort(countries,new Comparator<String>()
+public static void sortCountriesBylength() {
+	countries.sort((l1,l2)->
 	{
-
-		@Override
-		public int compare(String s1, String s2) {
-			int l1=s1.length();
-			int l2=s2.length();
-			if(l1<l2){
-				return -1;
-			}
-			else if(l1>l2){
-				return 1;
-			}
-			else{
-				return s1.compareTo(s2);
-			}
-		}
-	});
-	countries.forEach(s->System.out.println(s));
-	
+	int length=l2.length()-l1.length();
+	if(length==0) {
+		return l1.compareToIgnoreCase(l2);
+	}
+	return l2.length()-l1.length();
+	}
+	);
+	countries.forEach(System.out::println);
 }
-public static void removeCountry(String name){
-	if(name.length()>6 && countries.contains(name)){
+public static void removeCountry(String name) {
+	if(name.length()>6 && countries.contains(name)) {
 		countries.remove(name);
-		System.out.println("List of countries after removing "+name+" are");
-		countries.forEach(s->System.out.println(s+"  "));
 	}
-	else{
-		System.out.println("The item length is less than 6 or not in the List");
+	else {
+	System.out.println("The Element is not Present or length is less than 6");
 	}
-
+	countries.forEach(System.out::println);
 }
-	public static void main(String[] args) {
-		System.out.println("Result of displayCountries() Method");
-		LambdaExercise.displayCountries();
-		System.out.println("Result of DisplayCountryCapitals() Method");
-		LambdaExercise.DisplayCountryCapitals();
-		System.out.println("Result of sortCountriesByName() Method");
-		LambdaExercise.sortCountriesByName();
-		System.out.println("Result of sortCountriesBylength() Method");
-		LambdaExercise.sortCountriesBylength();
-		System.out.println("Result of removeCountry(\"Srilanka\") Method");
-		LambdaExercise.removeCountry("Srilanka");
-	}
-
+public static void main(String[] args) {
+	System.out.println("************Displaying Countries*****************");
+	displayCountries();
+	System.out.println("************Displaying Countries and Capitals*****************");
+	displayCountryCapitals();
+	System.out.println("************Sort Countries by Name*****************");
+	sortCountriesByName();
+	System.out.println("************Sort Countries by Length*****************");
+	sortCountriesBylength();
+	System.out.println("************Remove Countries if valid Length and name*****************");
+	removeCountry("Sri Lanka");
+}
 }
