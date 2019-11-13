@@ -1,3 +1,6 @@
+package com.cts.stream;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,55 +10,85 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class StreamOperationsExercise {
-	static List<Player> players=Arrays.asList(
-			new Player("Amit",2,4,130,"India"),
-			new Player("Bipul",5001,4,7,"USA"),
-			new Player("Guhan",2,7000,6000,"Singapore"),
-			new Player("Vishwendra",5062,8000,7,"Germany"),
-			new Player("Gopal",5060,8002,7,"Germany")
-			);
-	static void displayPlayers(){
-		players.stream().forEach(s->System.out.println(s+" "));
-	}
-	public static void main(String[] args) {
-		//StreamOperationsExercise.displayPlayers();
-		//StreamOperationsExercise.displayPlayersForCountry("India");
-		
-		StreamOperationsExercise.getAverageRunsByCountry("Germany");
+	private static List<Player> players=new ArrayList<>(Arrays.asList(
+			new Player("Dhoni",200,10010,99,new Country(1,"India")),
+			new Player("Virat",201,10011,129,new Country(1,"India")),
+			new Player("Sachin",202,10012,123,new Country(1,"India")),
+			new Player("Yuvraj",203,10013,124,new Country(1,"India")),
+			new Player("Ponting",200,10010,121,new Country(2,"Australia")),
+			new Player("Mcrath",198,10011,122,new Country(2,"Australia")),
+			new Player("Akhtar",202,1000,123,new Country(3,"Pakistan")),
+			new Player("Sami",199,10013,124,new Country(3,"Pakistan"))
+			));
+	public static void displayPlayers(){
+		players.stream().map(Player::getPlayerName).forEach(System.out::println);
 	}
 	public static void displayPlayersForCountry(String country){
-		List<Player> students=players.stream().filter(s->s.getHighestScore()>100 && s.getCountry().equalsIgnoreCase(country)).collect(Collectors.toList());
-		students.forEach(s->System.out.println(s));
+		players.stream().filter(c-> c.getCountry().getCountryName().equalsIgnoreCase(country) && c.getHighestScore()>100).map(Player::getPlayerName).forEach(System.out::println);;
 	}
 	public static LinkedList<String> getPlayerNames(){
-		//LinkedList<Player> player=players.stream().filter(s->s.getRuns()>5000).sorted((s1,s2)->s2.getPlayerName().compareTo(s1.getPlayerName())).collect(Collectors.toCollection(LinkedList::new));
-		LinkedList<String> player=players.stream().filter(s->s.getRuns()>5000).map(Player::getPlayerName).sorted().collect(Collectors.toCollection(LinkedList::new));
-		return player;
+		LinkedList<String> result=players.stream().filter(f -> f.getRuns()>5000).sorted((n1,n2)->n2.getPlayerName().compareToIgnoreCase(n1.getPlayerName())).map(Player::getPlayerName).collect(Collectors.toCollection(LinkedList::new));
+		System.out.println(result);
+		return result;
 	}
-	public static Map<String,Double> getAverageRunsByCountry(String country){
-		Map<String,Double> result=players.stream().collect(Collectors.groupingBy(Player::getCountry,Collectors.averagingDouble(Player::getRuns)));
-		result.forEach((k,v)->System.out.println(k+""+v));
+	public static Double getAverageRunsByCountry(String country){
+		Double result=players.stream().filter(c-> c.getCountry().getCountryName().equalsIgnoreCase(country)).collect(Collectors.averagingDouble(Player::getRuns));
+		System.out.println("Average of "+country+" is "+result);
 		return result;
 	}
 	public static List<String> getPlayerNamesSorted(){
-		List<String> result=players.stream().sorted((a,b)->a.getCountry().compareTo(b.getCountry())).sorted((a,b)->b.getMatchesPlayed()-a.getMatchesPlayed()).collect(Collectors.mapping(Player::getPlayerName, Collectors.toList()));
-		result.forEach(System.out::println);
+		List<String> result=players.stream().sorted((c1,c2)->c1.getCountry().getCountryName().compareToIgnoreCase(c2.getCountry().getCountryName())
+				).sorted((m1,m2)->m2.getMatchesPlayed()-m1.getMatchesPlayed()).map(Player::getPlayerName).collect(Collectors.toList());
+		System.out.println(result);
 		return result;
 	}
-	public static Map<String,String> getPlayerCountry(){
-		Map<String,String> result=players.stream().filter(p -> p.getMatchesPlayed()>200).collect(Collectors.toMap(Player::getCountry, Player::getCountry));
+	public static Map<String, String> getPlayerCountry(){
+		Map<String,String> result=players.stream().filter(f-> f.getMatchesPlayed()>200).collect(Collectors.toMap(Player::getPlayerName, v->v.getCountry().getCountryName()));
+		System.out.println(result);
 		return result;
 	}
-	public static Optional<Player> getMaxRunsPlayer(){
-		
-		Optional<Player> result=players.stream().sorted((a,b)->b.getHighestScore()-a.getHighestScore()).findFirst();
-		return result;
+	public static Player getMaxRunsPlayer(){
+		Optional<Player> p=players.stream().sorted((p1,p2)->p2.getHighestScore()-p1.getHighestScore()).findFirst();
+		Player player=p.get();
+		System.out.println(player);
+		return player;
 	}
-	public static List<Player> findPlayer(String name, String country){
-		return players.stream().filter(p -> p.getPlayerName().equalsIgnoreCase(name) && p.getCountry().equalsIgnoreCase(country)).collect(Collectors.toList());
+	public static Player findPlayer(String name, String country){
+		Optional<Player> pl=players.stream().filter(p-> p.getCountry().getCountryName().equalsIgnoreCase(country) && p.getPlayerName().equalsIgnoreCase(name)).findAny();
+		Player player=pl.get();
+		System.out.println(player);
+		return player;
 	}
 	public static boolean checkHighScorerByCountry(String country){
-		return players.stream().filter(c -> c.getRuns()>1000 && c.getCountry().equalsIgnoreCase(country)).findAny().isPresent();
+		long result=players.stream().filter(f-> f.getCountry().getCountryName().equalsIgnoreCase(country) && f.getRuns()>10000).count();
+		if(result>0){
+			System.out.println(result +": Result matches your criteria");
+			return true;
+		}
+		else{
+			System.out.println("No Player matxches the condition");
+			return false;	
+		}
+
 	}
-	
+	public static void main(String[] args) {
+		System.out.println("***********************Name Of All Players*****************");
+		displayPlayers();
+		System.out.println("****************Players with Highest score more than 100 from given Country*****************");
+		displayPlayersForCountry("India");
+		System.out.println("****************Players with more than 5000 runs in descending order of name****************");
+		getPlayerNames();
+		System.out.println("****************Average Runs from a particular Country***************");
+		getAverageRunsByCountry("India");
+		System.out.println("***************Get Sorted Players Name**************************");
+		getPlayerNamesSorted();
+		System.out.println("***************Players who have played more than 200 matches**************************");
+		getPlayerCountry();
+		System.out.println("************* Maximum Score**************");
+		getMaxRunsPlayer();
+		System.out.println("************* Player from a particular country*************");
+		findPlayer("sachin","India");
+		System.out.println("************* Player from a particular country scoring more than 10000*************");
+		checkHighScorerByCountry("Australia");
+	}
 }
