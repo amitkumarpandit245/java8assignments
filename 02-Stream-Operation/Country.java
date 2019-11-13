@@ -1,31 +1,28 @@
+package com.cts.stream;
 
 public class Country {
-	private int countryID;
+	private int countryId;
 	private String countryName;
-	public Country() {
+	public Country(int countryId, String countryName) {
 		super();
+		this.countryId = countryId;
+		this.countryName = countryName;
 	}
-	
-	public int getCountryID() {
-		return countryID;
+	public int getCountryId() {
+		return countryId;
 	}
-
-	public void setCountryID(int countryID) {
-		this.countryID = countryID;
+	public void setCountryId(int countryId) {
+		this.countryId = countryId;
 	}
-
 	public String getCountryName() {
 		return countryName;
 	}
-
 	public void setCountryName(String countryName) {
 		this.countryName = countryName;
 	}
-
 	@Override
 	public String toString() {
-		return "Country [countryID=" + countryID + ", countryName=" + countryName + "]";
+		return "Country [countryId=" + countryId + ", countryName=" + countryName + "]";
 	}
-	
 
 }
