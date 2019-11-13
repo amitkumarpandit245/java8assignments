@@ -1,11 +1,12 @@
+package com.cts.stream;
 
 public class Player {
 	private String playerName;
 	private int matchesPlayed;
 	private int runs;
 	private int highestScore;
-	private String country;
-	public Player(String playerName, int matchesPlayed, int runs, int highestScore, String country) {
+	private Country country;
+	public Player(String playerName, int matchesPlayed, int runs, int highestScore, Country country) {
 		super();
 		this.playerName = playerName;
 		this.matchesPlayed = matchesPlayed;
@@ -13,7 +14,6 @@ public class Player {
 		this.highestScore = highestScore;
 		this.country = country;
 	}
-
 	public String getPlayerName() {
 		return playerName;
 	}
@@ -38,10 +38,10 @@ public class Player {
 	public void setHighestScore(int highestScore) {
 		this.highestScore = highestScore;
 	}
-	public String getCountry() {
+	public Country getCountry() {
 		return country;
 	}
-	public void setCountry(String country) {
+	public void setCountry(Country country) {
 		this.country = country;
 	}
 	@Override
@@ -49,6 +49,5 @@ public class Player {
 		return "Player [playerName=" + playerName + ", matchesPlayed=" + matchesPlayed + ", runs=" + runs
 				+ ", highestScore=" + highestScore + ", country=" + country + "]";
 	}
-	
 
 }
